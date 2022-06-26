@@ -1,0 +1,28 @@
+version: "2"
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: myblog
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: password
+    ports:
+      - "50001:50001"
+  app:
+    build: .
+    command: bundle exec rails s -p 50000
+    volumes:
+      - ".:/blogapp"
+    ports:
+      - "50000:50000"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      DB_USER: root
+      DB_NAME: myblog
+      DB_PASSWORD:
+      DB_HOST: localhost
